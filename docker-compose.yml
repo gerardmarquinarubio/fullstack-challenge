@@ -14,7 +14,32 @@ services:
       - ./database/data:/var/lib/mysql
     networks:
       - fullstack-challenge
-
+  api:
+    container_name: api
+    image: api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command:
+      [
+        "uvicorn",
+        "fullstack_challenge_api.main:app",
+        "--port=20002",
+        "--host=0.0.0.0",
+        "--reload"
+      ]
+    environment:
+      COLUMNS: 164
+    tty: true
+    ports:
+      - "20002:20002"
+    env_file:
+      - ./api/config/.env
+    volumes:
+      - ./api/fullstack_challenge_api:/fullstack_challenge_api
+      - ./api/config/config.toml:/config/config.toml
+    networks:
+      - fullstack-challenge
   frontend:
     build:
       context: "./frontend"
@@ -26,25 +51,6 @@ services:
       - ./frontend/public:/app/public
     ports:
       - 3000:3000
-    networks:
-      - fullstack-challenge
-  api:
-    container_name: api
-    image: api
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    command: ["uvicorn", "fullstack_challenge_api.main:app", "--port=20002", "--host=0.0.0.0", "--reload"]
-    environment:
-      COLUMNS: 164
-    tty: true
-    ports:
-      - "20002:20002"
-    env_file:
-      - ./api/config/.env
-    volumes:
-      - ./api/fullstack_challenge_api:/fullstack_challenge_api
-      - ./api/config/config.toml:/config/config.toml
     networks:
       - fullstack-challenge
 
