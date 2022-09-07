@@ -12,9 +12,9 @@ const Home: NextPage<{companies: Company[], deals: Deal[]}> = (props) => {
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-  const companies_data = await fetch('http://172.20.0.3:20002/companies');
+  const companies_data = await fetch('http://api:20002/companies');
   const companies : Company[] = await companies_data.json();
-  const deals_data = await fetch('http://172.20.0.3:20002/deals');
+  const deals_data = await fetch('http://api:20002/deals');
   const deals : Deal[] = await deals_data.json();
 
   for (const deal of deals) {
