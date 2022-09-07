@@ -11,6 +11,7 @@ export default function CompanyLayout({companies} : CompanyLayoutProps) {
     const [nameFilter, setNameFilter] = useState("");
     const [countryFilter, setCountryFilter] = useState("");
     const [sortFilter, setSortFilter] = useState(false);
+    const [dateFilter, setDateFilter] = useState(false);
 
     return (
         <div className="flex flex-col place-items-center p-4">
@@ -46,7 +47,10 @@ export default function CompanyLayout({companies} : CompanyLayoutProps) {
                         onClick={() => setSortFilter(!sortFilter)}>
                             Nº of deals ⇅
                         </th>
-                        <th>Founding date</th>
+                        <th className="cursor-pointer"
+                        onClick={() => setDateFilter(!dateFilter)}>
+                            Founding date ⇅
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,6 +63,14 @@ export default function CompanyLayout({companies} : CompanyLayoutProps) {
                     .filter( c => {
                         if (!countryFilter) return true;
                         return c.country.toLowerCase() == countryFilter.toLowerCase();
+                    })
+                    .sort( (a, b) => {
+                        const a_date = new Date(a.founding_date);
+                        const b_date = new Date(b.founding_date);
+                        if (dateFilter)
+                            return +a_date - +b_date;
+                        else
+                            return +b_date - +a_date;
                     })
                     .sort( (a, b) => {
                         if (sortFilter)
