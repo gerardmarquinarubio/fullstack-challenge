@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/companies")
 async def get_companies(db: Session = Depends(get_db)):
-    pass
+    test = db.execute('SELECT * FROM companies')
+    return test.fetchall()
